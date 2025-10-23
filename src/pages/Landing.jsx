@@ -4,7 +4,7 @@ import Filter from '../components/Filter'
 import ProductDisplay from '../components/ProductDisplay'
 
 const Landing = () => {
-  const [filterData, setFilterData] = useState(null)
+  const [filterData, setFilterData] = useState('')
 
   const handleFilterData =(data)=>{
     setFilterData(data)
@@ -14,7 +14,7 @@ const Landing = () => {
     <div className='padding-[10px] h-full m-2'>
       <Navigation/>
       <Filter childText = {handleFilterData}/>
-      <ProductDisplay/>
+      <ProductDisplay filterData = {filterData}/>
     </div>
   )
 }

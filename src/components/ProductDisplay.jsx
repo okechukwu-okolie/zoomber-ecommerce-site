@@ -1,17 +1,18 @@
  import { useEffect, useState,useMemo } from "react"
 import Product from './Product'
 
-const ProductDisplay = () => {
+const ProductDisplay = ({filterData}) => {
     const [products, setProducts] = useState([])
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(true)
     const [currentPage, setCurrentPage] = useState(1)
+    const [filter, setFilter] = useState([])
 
 
 
     const ItemsPerPage = 10
     const totalPages = Math.ceil(products.length / ItemsPerPage)
-    console.log('total pages',totalPages)
+    // console.log('total pages',totalPages)
 
     const currentItems = useMemo(()=>{
       const startIndex = (currentPage - 1) * ItemsPerPage;
@@ -39,14 +40,24 @@ const ProductDisplay = () => {
    useEffect(()=>{
       
     const  product =async ()=>{
+
+      
          try {
          const res = await fetch('https://api.escuelajs.co/api/v1/products')
          if(!res.ok){
                  throw Error(`error status:${res.status}, error message:${res.statusText}`)
          }
          const data =  await res.json()
-         console.log(data.length)
-         setProducts(data)
+         console.log(data)
+         console.log(filterData)
+         const lowercaseFilter = filterData.toLowerCase()
+         const filtered = data.filter(item =>
+          item.title.toLowerCase().includes(lowercaseFilter)||
+          item.category.tolowerCase().includes(lowercaseFilter)
+         )
+         {filterData ? setProducts(filtered) : setProducts(data)}
+
+        //  setProducts(data)
          
          } catch (err) {
              setError(err.message)
@@ -55,7 +66,30 @@ const ProductDisplay = () => {
          }
         }
          product()
-    },[])
+    },[filterData])
+//this use effect provides the filtered products
+    // useEffect(()=>{
+    //     const  filteredProducts =async ()=>{
+
+      
+    //      try {
+    //      const res = await fetch('https://api.escuelajs.co/api/v1/products')
+    //      if(!res.ok){
+    //              throw Error(`error status:${res.status}, error message:${res.statusText}`)
+    //      }
+    //      const data =  await res.json()
+         
+      
+    //      setProducts(data)
+         
+    //      } catch (err) {
+    //          setError(err.message)
+    //      } finally{
+    //          setLoading(false)
+    //      }
+    //     }
+    //      filteredProducts()
+    // },[filterData])
 
 //error states
   if(error){
@@ -70,7 +104,7 @@ const ProductDisplay = () => {
   return (
     <>
     <div className='flex flex-wrap m-2 justify-evenly '>
-        {currentItems.map((product)=> <Product key={Date.now} 
+        {currentItems.map((product)=> <Product key={product.id} 
                                     title={product.title}
                                     price = {product.price}
                                     image = {product.images}
@@ -101,7 +135,7 @@ const ProductDisplay = () => {
     </div>
 
 
-    <div className="page-info">
+    <div className="text-[10px] mb-[40px]">
         Page {currentPage} of {totalPages}
       </div>
 

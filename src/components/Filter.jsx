@@ -9,9 +9,9 @@ const Filter = ({childText}) => {
       setFilterText(e.target.value)
       childText(filterText)
   }
-  console.log(filterText)
+  // console.log(filterText)
   return (
-    <div className='flex items-center bg-slate-200 mt-1 h-[30px] rounded px-3'>
+    <div className='flex items-center bg-slate-200 mt-1 h-[30px] rounded px-3 sticky top-[25px] '>
       <input  type="text"
               value={filterText}
               onChange={handleFilterText}
