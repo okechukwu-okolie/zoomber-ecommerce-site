@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { BiSearch } from 'react-icons/bi'
 
 const Filter = ({childText}) => {
+  
   const [filterText, setFilterText] = useState('')
 
   const handleFilterText =(e)=>{
